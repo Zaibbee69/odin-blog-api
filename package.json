@@ -1,0 +1,27 @@
+{
+  "name": "odin-blog-api",
+  "version": "1.0.0",
+  "description": "A blog api ",
+  "homepage": "https://github.com/Zaibbee69/odin-blog-api#readme",
+  "bugs": {
+    "url": "https://github.com/Zaibbee69/odin-blog-api/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zaibbee69/odin-blog-api.git"
+  },
+  "license": "ISC",
+  "author": "Zaibbee69",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "passport": "^0.7.0",
+    "prisma": "^6.19.3"
+  }
+}
