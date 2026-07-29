@@ -80,4 +80,26 @@ async function deletePost(req, res) {
     return res.status(200).json("Post Deleted!")
 }
 
-module.exports = { getAllPosts, getPost, addPost, updatePost, deletePost }
+async function publishPost(req, res) {
+    const postId = parseInt(req.params.id, 10)
+
+    const post = await prisma.post.update({
+        where: { id: postId },
+        data: { status: "PUBLISHED" }
+    })
+
+    return res.status(200).json({ post })
+}
+
+async function unPublishPost(req, res) {
+    const postId = parseInt(req.params.id, 10)
+
+    const post = await prisma.post.update({
+        where: { id: postId },
+        data: { status: "NOT_PUBLISHED" }
+    })
+    return res.status(200).json({ post })
+
+}
+
+module.exports = { getAllPosts, getPost, addPost, updatePost, deletePost, publishPost, unPublishPost }
