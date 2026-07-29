@@ -20,6 +20,14 @@ app.get('/', authenticate, (req, res) => {
 app.use("/auth", authRouter);
 app.use("/posts", authenticate, postRouter)
 
+// --- GLOBAL ERROR HANDLER ---
+app.use((err, req, res, next) => {
+    console.error('❌ Error caught by global handler:', err.stack);
+
+    res.status(500).json({ error: 'Internal Server Error' });
+});
+
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });

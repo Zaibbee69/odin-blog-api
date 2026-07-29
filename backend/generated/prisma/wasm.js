@@ -178,7 +178,6 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -187,8 +186,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum PostStatus {\n  PUBLISHED\n  NOT_PUBLISHED\n}\n\nmodel User {\n  id           Int      @id @default(autoincrement())\n  name         String\n  email        String   @unique\n  passwordHash String\n  createdAt    DateTime @default(now())\n  isAuthor     Boolean  @default(false)\n\n  posts    Post[]\n  comments Comment[]\n}\n\nmodel Post {\n  id        Int        @id @default(autoincrement())\n  title     String\n  content   String\n  status    PostStatus @default(NOT_PUBLISHED)\n  createdAt DateTime   @default(now())\n  updatedAt DateTime   @updatedAt\n\n  user     User      @relation(fields: [userId], references: [id])\n  userId   Int\n  comments Comment[]\n}\n\nmodel Comment {\n  id        Int      @id @default(autoincrement())\n  content   String\n  createdAt DateTime @default(now())\n\n  user   User @relation(fields: [userId], references: [id])\n  userId Int\n  post   Post @relation(fields: [postId], references: [id])\n  postId Int\n}\n",
-  "inlineSchemaHash": "019b91be0a0dbb9e6dbc97cdeccba617936bb44aa7fe3b3e3974480d115220c9",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum PostStatus {\n  PUBLISHED\n  NOT_PUBLISHED\n}\n\nmodel User {\n  id           Int      @id @default(autoincrement())\n  name         String\n  email        String   @unique\n  passwordHash String\n  createdAt    DateTime @default(now())\n  isAuthor     Boolean  @default(false)\n\n  posts    Post[]\n  comments Comment[]\n}\n\nmodel Post {\n  id        Int        @id @default(autoincrement())\n  title     String\n  content   String\n  status    PostStatus @default(NOT_PUBLISHED)\n  createdAt DateTime   @default(now())\n  updatedAt DateTime   @updatedAt\n\n  user     User      @relation(fields: [userId], references: [id])\n  userId   Int\n  comments Comment[]\n}\n\nmodel Comment {\n  id        Int      @id @default(autoincrement())\n  content   String\n  createdAt DateTime @default(now())\n\n  user   User @relation(fields: [userId], references: [id])\n  userId Int\n  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)\n  postId Int\n}\n",
+  "inlineSchemaHash": "d574b1357b7d26d803320ab16e34545fdc7e33ca58066b5af6e9881d2148e90a",
   "copyEngine": true
 }
 config.dirname = '/'
