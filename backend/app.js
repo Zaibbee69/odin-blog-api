@@ -6,6 +6,7 @@ const requireAuthor = require("./middlewares/requireAuthor")
 // Routers
 const authRouter = require("./routes/authRoutes")
 const postRouter = require("./routes/postRoutes")
+const commentRouter = require("./routes/commentRoutes")
 
 // App Setup
 const app = express();
@@ -14,11 +15,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
-app.get('/', authenticate, (req, res) => {
-    res.send('Hello, World!');
-});
 app.use("/auth", authRouter);
 app.use("/posts", authenticate, postRouter)
+app.use("/comments", authenticate, commentRouter)
 
 // --- GLOBAL ERROR HANDLER ---
 app.use((err, req, res, next) => {

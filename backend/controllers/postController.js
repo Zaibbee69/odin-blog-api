@@ -102,4 +102,24 @@ async function unPublishPost(req, res) {
 
 }
 
-module.exports = { getAllPosts, getPost, addPost, updatePost, deletePost, publishPost, unPublishPost }
+async function postComment(req, res) {
+    const postId = parseInt(req.params.id, 10)
+    const { content } = req.body
+    const user = req.user
+
+    const comment = await prisma.comment.create({
+        data: {
+            content,
+            user: {
+                connect: { id: user.sub }
+            },
+            post: {
+                connect: { id: postId }
+            }
+        }
+    })
+
+    return res.status(200).json({ comment })
+}
+
+module.exports = { getAllPosts, getPost, addPost, updatePost, deletePost, publishPost, unPublishPost, postComment }
