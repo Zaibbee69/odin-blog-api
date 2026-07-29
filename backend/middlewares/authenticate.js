@@ -14,7 +14,7 @@ function authenticate(req, res, next) {
     try {
         const payload = jwt.verify(token, process.env.JWT_SECRET)
         req.user = payload;
-        next()
+        return next()
     }
     catch {
         return res.sendStatus(403)

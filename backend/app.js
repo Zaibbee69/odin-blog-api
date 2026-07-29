@@ -18,7 +18,7 @@ app.get('/', authenticate, (req, res) => {
     res.send('Hello, World!');
 });
 app.use("/auth", authRouter);
-app.use("/posts", postRouter)
+app.use("/posts", authenticate, postRouter)
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
