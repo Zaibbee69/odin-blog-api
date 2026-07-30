@@ -3,7 +3,7 @@ const express = require('express');
 const authenticate = require("./middlewares/authenticate")
 const requireAuthor = require("./middlewares/requireAuthor")
 const { Prisma } = require('./generated/prisma');
-
+const cors = require("cors");
 
 // Routers
 const authRouter = require("./routes/authRoutes")
@@ -15,7 +15,14 @@ const app = express();
 const PORT = 3000;
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.json());
 
+// Cors Setup
+app.use(
+    cors({
+        origin: "http://localhost:5173",
+    })
+);
 // Routes
 app.use("/auth", authRouter);
 app.use("/posts", postRouter)

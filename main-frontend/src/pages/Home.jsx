@@ -26,7 +26,7 @@ export default function Home() {
     async function fetchPosts() {
       setStatus("loading");
       try {
-        const response = await fetch("/posts");
+        const response = await fetch("http://localhost:3000/posts");
         if (!response.ok) throw new Error("Failed to load posts");
         const data = await response.json();
         if (isMounted) {
