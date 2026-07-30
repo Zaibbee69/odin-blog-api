@@ -6,29 +6,31 @@ async function getAllPosts(req, res) {
         where: { status: "PUBLISHED" }
     })
     return res.status(200).json({ posts })
+}
 
-
+async function allPosts(req, res) {
+    const posts = await prisma.post.findMany()
+    return res.status(200).json({ posts })
 }
 
 async function getPost(req, res) {
-
     const postId = parseInt(req.params.id, 10)
 
-
-    const post = await prisma.post.findUnique({
-        where: { id: postId }
+    const post = await prisma.post.findFirst({
+        where: {
+            id: postId,
+            status: "PUBLISHED"
+        }
     })
 
     // If no post found
     if (!post)
-        return res.status(403).json("No Post Found")
+        return res.status(404).json("No Post Found")
 
     return res.status(200).json({ post })
-
 }
 
 async function addPost(req, res) {
-
     const { title, content, status } = req.body
 
     // Get the user
@@ -44,9 +46,7 @@ async function addPost(req, res) {
             }
         }
     })
-
     return res.status(201).json({ post })
-
 }
 
 async function updatePost(req, res) {
@@ -57,7 +57,8 @@ async function updatePost(req, res) {
 
     const post = await prisma.post.update({
         where: {
-            id: postId
+            id: postId,
+            userId: user.sub
         },
         data: {
             title,
@@ -66,15 +67,18 @@ async function updatePost(req, res) {
         }
     })
 
-    return res.status(200).json({ post })
+    if (!post)
+        return res.status(403).json("Unauthorized")
 
+    return res.status(200).json({ post })
 }
 
 async function deletePost(req, res) {
     const postId = parseInt(req.params.id, 10)
+    const user = req.user
 
     await prisma.post.delete({
-        where: { id: postId }
+        where: { id: postId, userId: user.sub }
     })
 
     return res.status(200).json("Post Deleted!")
@@ -82,9 +86,10 @@ async function deletePost(req, res) {
 
 async function publishPost(req, res) {
     const postId = parseInt(req.params.id, 10)
+    const user = req.user
 
     const post = await prisma.post.update({
-        where: { id: postId },
+        where: { id: postId, userId: user.sub },
         data: { status: "PUBLISHED" }
     })
 
@@ -93,9 +98,10 @@ async function publishPost(req, res) {
 
 async function unPublishPost(req, res) {
     const postId = parseInt(req.params.id, 10)
+    const user = req.user
 
     const post = await prisma.post.update({
-        where: { id: postId },
+        where: { id: postId, userId: user.sub },
         data: { status: "NOT_PUBLISHED" }
     })
     return res.status(200).json({ post })
@@ -118,8 +124,7 @@ async function postComment(req, res) {
             }
         }
     })
-
     return res.status(200).json({ comment })
 }
 
-module.exports = { getAllPosts, getPost, addPost, updatePost, deletePost, publishPost, unPublishPost, postComment }
+module.exports = { getAllPosts, getPost, addPost, updatePost, deletePost, publishPost, unPublishPost, postComment, allPosts }
