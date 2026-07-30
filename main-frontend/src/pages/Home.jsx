@@ -8,9 +8,12 @@ const POSTS_PER_PAGE = 6;
 
 /**
  * Home
- * Public blog landing page. Fetches published posts from GET /posts,
- * spotlights the most recent as a hero, and lists the rest in a
- * reading grid with simple client-side "load more" pagination.
+ * Public blog landing page. Fetches published posts from GET /posts
+ * (returns Post[] with { id, title, content, status, createdAt,
+ * updatedAt, user: { name }, comments: [] } — the server already
+ * filters to published posts), spotlights the most recent as a
+ * hero, and lists the rest in a reading grid with simple
+ * client-side "load more" pagination.
  *
  * This page is read-only: no create/edit/publish/delete affordances
  * live here, that belongs to the separate author dashboard.
