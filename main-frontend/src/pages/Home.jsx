@@ -18,7 +18,7 @@ const POSTS_PER_PAGE = 6;
  * This page is read-only: no create/edit/publish/delete affordances
  * live here, that belongs to the separate author dashboard.
  */
-export default function Home() {
+export default function Home({ currentUser = null, onLogout } = {}) {
   const [posts, setPosts] = useState([]);
   const [status, setStatus] = useState("loading"); // loading | success | error
   const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE);
@@ -54,7 +54,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white text-black antialiased">
-      <Navbar />
+      <Navbar currentUser={currentUser} onLogout={onLogout} />
 
       <main className="mx-auto max-w-5xl px-6">
         {/* Hero / featured post */}

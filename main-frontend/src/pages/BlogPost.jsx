@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import CommentSection from "../components/CommentSection";
-import { getReadTime, formatDate } from "../components/postutils";
+import { getReadTime, formatDate } from "../components/postUtils";
 
 /**
  * BlogPost
@@ -16,7 +16,11 @@ import { getReadTime, formatDate } from "../components/postutils";
  * a signed-in visitor can comment; this page doesn't implement auth
  * itself, it just forwards whatever the app already knows.
  */
-export default function BlogPost({ currentUser = null, authToken = null }) {
+export default function BlogPost({
+  currentUser = null,
+  authToken = null,
+  onLogout,
+}) {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [status, setStatus] = useState("loading"); // loading | success | notFound | error
@@ -34,8 +38,9 @@ export default function BlogPost({ currentUser = null, authToken = null }) {
         }
         if (!response.ok) throw new Error("Failed to load post");
         const data = await response.json();
+        const resolvedPost = data?.post ?? data;
         if (isMounted) {
-          setPost(data);
+          setPost(resolvedPost);
           setStatus("success");
         }
       } catch (err) {
@@ -52,7 +57,7 @@ export default function BlogPost({ currentUser = null, authToken = null }) {
 
   return (
     <div className="min-h-screen bg-white text-black antialiased">
-      <Navbar />
+      <Navbar currentUser={currentUser} onLogout={onLogout} />
 
       <main className="mx-auto max-w-2xl px-6 py-14 sm:py-20">
         {status === "loading" && <ArticleSkeleton />}
@@ -92,7 +97,7 @@ export default function BlogPost({ currentUser = null, authToken = null }) {
 }
 
 function Article({ post }) {
-  const { title, content, createdAt, user } = post;
+  const { title, content = "", createdAt, user } = post;
   const readTime = getReadTime(content);
   const publishedDate = formatDate(createdAt, { long: true });
 

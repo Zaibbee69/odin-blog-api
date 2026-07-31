@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { getExcerpt, getReadTime, formatDate } from "./postUtils";
 
 /**
@@ -24,8 +25,8 @@ export default function BlogCard({ post, index }) {
     typeof index === "number" ? String(index + 1).padStart(2, "0") : null;
 
   return (
-    <a
-      href={`/posts/${id}`}
+    <Link
+      to={`/posts/${id}`}
       className="group flex flex-col border-b border-zinc-200 py-8 transition-opacity hover:opacity-80 last:border-b-0"
     >
       <div className="mb-2 flex items-center gap-3 font-mono text-xs uppercase tracking-widest text-zinc-500">
@@ -61,7 +62,7 @@ export default function BlogCard({ post, index }) {
           </>
         )}
       </div>
-    </a>
+    </Link>
   );
 }
 

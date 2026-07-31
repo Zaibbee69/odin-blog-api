@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { getExcerpt, getReadTime, formatDate } from "./postUtils";
 
 /**
@@ -22,7 +23,7 @@ export default function FeaturedPost({ post }) {
   const restOfExcerpt = excerpt?.slice(1);
 
   return (
-    <a href={`/posts/${id}`} className="group block">
+    <Link to={`/posts/${id}`} className="group block">
       <div className="mb-6 flex items-center gap-3 font-mono text-xs uppercase tracking-widest text-zinc-500">
         <span className="border border-zinc-900 px-2 py-1 text-black">
           Latest
@@ -64,6 +65,6 @@ export default function FeaturedPost({ post }) {
           Read the story
         </span>
       </div>
-    </a>
+    </Link>
   );
 }

@@ -60,7 +60,7 @@ export default function CommentForm({ currentUser, onSubmit }) {
         id="comment"
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        placeholder={`Share your thoughts, ${currentUser.name}…`}
+        placeholder={`Share your thoughts, ${currentUser.name ?? currentUser.email}…`}
         rows={4}
         maxLength={2000}
         className="w-full resize-none border border-zinc-300 bg-white px-4 py-3 text-sm text-black placeholder:text-zinc-400 focus:border-black focus:outline-none"

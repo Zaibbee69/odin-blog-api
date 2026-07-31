@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router";
 
 /**
  * Navbar
@@ -6,14 +7,14 @@ import { useState, useEffect } from "react";
  * hamburger menu on mobile. No auth/admin controls — this is the
  * public reading surface only.
  */
-export default function Navbar() {
+export default function Navbar({ currentUser = null, onLogout }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
   const navLinks = [
-    { label: "Home", href: "/" },
-    { label: "Archive", href: "/archive" },
-    { label: "About", href: "/about" },
+    { label: "Home", to: "/" },
+    { label: "Archive", to: "/archive" },
+    { label: "About", to: "/about" },
   ];
 
   useEffect(() => {
@@ -39,27 +40,40 @@ export default function Navbar() {
     >
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
         {/* Logo / wordmark */}
-        <a href="/" className="font-serif text-xl tracking-tight text-black">
+        <Link to="/" className="font-serif text-xl tracking-tight text-black">
           The Marginalia
-        </a>
+        </Link>
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link.label}
-              href={link.href}
+              to={link.to}
               className="text-sm text-zinc-600 transition-colors hover:text-black"
             >
               {link.label}
-            </a>
+            </Link>
           ))}
-          <a
-            href="/login"
-            className="rounded-full border border-zinc-900 px-4 py-1.5 text-sm text-black transition-colors hover:bg-black hover:text-white"
-          >
-            Sign in
-          </a>
+          {currentUser ? (
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-zinc-600">{currentUser.email}</span>
+              <button
+                type="button"
+                onClick={onLogout}
+                className="rounded-full border border-zinc-900 px-4 py-1.5 text-sm text-black transition-colors hover:bg-black hover:text-white"
+              >
+                Sign out
+              </button>
+            </div>
+          ) : (
+            <Link
+              to="/login"
+              className="rounded-full border border-zinc-900 px-4 py-1.5 text-sm text-black transition-colors hover:bg-black hover:text-white"
+            >
+              Sign in
+            </Link>
+          )}
         </nav>
 
         {/* Mobile menu toggle */}
@@ -98,22 +112,35 @@ export default function Navbar() {
       >
         <nav className="flex flex-col gap-1 px-6 py-4">
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link.label}
-              href={link.href}
+              to={link.to}
               onClick={() => setIsMenuOpen(false)}
               className="rounded-md px-2 py-3 text-base text-zinc-700 hover:bg-zinc-50 hover:text-black"
             >
               {link.label}
-            </a>
+            </Link>
           ))}
-          <a
-            href="/login"
-            onClick={() => setIsMenuOpen(false)}
-            className="mt-2 rounded-full border border-zinc-900 px-4 py-2 text-center text-base text-black"
-          >
-            Sign in
-          </a>
+          {currentUser ? (
+            <button
+              type="button"
+              onClick={() => {
+                setIsMenuOpen(false);
+                onLogout?.();
+              }}
+              className="mt-2 rounded-full border border-zinc-900 px-4 py-2 text-center text-base text-black"
+            >
+              Sign out ({currentUser.email})
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              onClick={() => setIsMenuOpen(false)}
+              className="mt-2 rounded-full border border-zinc-900 px-4 py-2 text-center text-base text-black"
+            >
+              Sign in
+            </Link>
+          )}
         </nav>
       </div>
     </header>

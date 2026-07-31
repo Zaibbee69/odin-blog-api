@@ -44,7 +44,18 @@ export default function CommentSection({
       throw new Error("Failed to post comment");
     }
 
-    const newComment = await response.json();
+    const data = await response.json();
+    const createdComment = data.comment ?? data;
+    // Your postComment controller doesn't `include: { user: true }` on
+    // create, so the response has no nested user object. We already
+    // know who's posting it (currentUser), so fill in a display name
+    // rather than showing "Anonymous" until the next full page load.
+    const newComment = {
+      ...createdComment,
+      user: createdComment.user ?? {
+        name: currentUser?.name ?? currentUser?.email ?? "You",
+      },
+    };
     setComments((current) => [newComment, ...current]);
   }
 
